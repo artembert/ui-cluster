@@ -5,11 +5,12 @@ import {
 } from "./components/moving-circles";
 
 import "./style.css";
+import { getPoints } from "./data/points";
 
 const map = new maplibregl.Map({
   container: "map",
   zoom: 5,
-  minZoom: 4,
+  minZoom: 1,
   center: [95.899147, 18.088694],
   style:
     "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
@@ -29,10 +30,19 @@ map.on("load", function () {
     // Set to true if the canvas source is animated. If the canvas is static, animate should be set to false to improve performance.
     animate: true,
   });
-
   map.addLayer({
     id: "canvas-layer",
     type: "raster",
     source: movingCirclesSourceConfig.name,
+  });
+
+  map.addSource("points", {
+    type: "geojson",
+    data: getPoints(),
+  });
+  map.addLayer({
+    id: "points",
+    type: "circle",
+    source: "points",
   });
 });
