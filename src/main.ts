@@ -1,4 +1,5 @@
 import "./style.css";
+import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
 import {
   movingCirclesInit,
