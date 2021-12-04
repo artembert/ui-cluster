@@ -1,4 +1,5 @@
-import { Feature, FeatureCollection, Geometry } from "geojson";
+import { Feature, FeatureCollection, Point } from "geojson";
+import { CircleChartProperties } from "../models/circle-chart";
 
 const isInverseRandom: () => boolean = () => Math.random() > 0.5;
 
@@ -11,18 +12,19 @@ const getRandomCoordinates: () => [number, number] = () => {
   ];
 };
 
-export const getPoints: (count?: number) => FeatureCollection<Geometry> = (
+export const getPoints: (count?: number) => FeatureCollection<Point> = (
   count = 10
 ) => {
-  const features = new Array(count).fill(undefined).map<Feature>(() => ({
+  const features = new Array(count).fill(undefined).map<Feature<Point>>(() => ({
     type: "Feature",
     geometry: {
       type: "Point",
       coordinates: getRandomCoordinates(),
     },
-    properties: {},
+    properties: {
+      content: ["a", "b", "c"],
+    } as CircleChartProperties,
   }));
-  console.log(features);
   return {
     type: "FeatureCollection",
     features,

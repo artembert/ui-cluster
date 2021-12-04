@@ -1,11 +1,11 @@
+import "./style.css";
 import maplibregl from "maplibre-gl";
 import {
   movingCirclesInit,
   movingCirclesSourceConfig,
 } from "./components/moving-circles";
-
-import "./style.css";
 import { getPoints } from "./data/points";
+import { renderCircleChartMarkers } from "./components/circle-chart";
 
 const map = new maplibregl.Map({
   container: "map",
@@ -17,6 +17,10 @@ const map = new maplibregl.Map({
 });
 
 movingCirclesInit();
+
+const points = getPoints();
+renderCircleChartMarkers(map, points);
+
 map.on("load", function () {
   map.addSource(movingCirclesSourceConfig.name, {
     type: "canvas",
@@ -38,7 +42,7 @@ map.on("load", function () {
 
   map.addSource("points", {
     type: "geojson",
-    data: getPoints(),
+    data: points,
   });
   map.addLayer({
     id: "points",
