@@ -1,10 +1,16 @@
 import maplibregl, { Map } from "maplibre-gl";
 import { FeatureCollection, Point } from "geojson";
+import { drawPieChart, PieChartItem } from "./pie-chart";
 
 const createMaker: () => HTMLElement = () => {
-  const el = document.createElement("div");
-  el.className = "marker";
-  return el;
+  const data: PieChartItem[] = [
+    { label: "Food", value: 1, color: "#39CCCC" },
+    { label: "Party", value: 1, color: "#3D9970" },
+    { label: "Rent", value: 1, color: "#001F3F" },
+    { label: "Chocolates", value: 1, color: "#85144B" },
+  ];
+
+  return drawPieChart(data);
 };
 
 export const renderCircleChartMarkers: (
