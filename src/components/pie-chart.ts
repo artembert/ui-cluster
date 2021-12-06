@@ -48,6 +48,33 @@ const calculateEnd: (
   return degreeToRadians(calculateEndAngle(data, index, total));
 };
 
+const clipCenterCircle: (
+  ctx: CanvasRenderingContext2D,
+  borderWidth?: number
+) => void = (ctx, borderWidth = 5) => {
+  const [x, y] = [ctx.canvas.width / 2, ctx.canvas.height / 2];
+
+  if (borderWidth > ctx.canvas.width / 2) {
+    console.error("Border should be smaller then marker radius");
+  }
+  /// save context for clipping
+  ctx.save();
+
+  /// create path
+  ctx.beginPath();
+  ctx.arc(x, y, y - borderWidth, 0, 2 * Math.PI);
+  ctx.closePath();
+
+  /// set clipping mask based on shape
+  ctx.clip();
+
+  /// clear anything inside it
+  ctx.clearRect(0, 0, x * 2, y * 2);
+
+  /// remove clipping mask
+  ctx.restore();
+};
+
 export const drawPieChart: (
   data: PieChartItem[],
   size?: number
@@ -72,6 +99,7 @@ export const drawPieChart: (
     ctx.arc(x, y, y, startAngle, endAngle);
     ctx.fill();
   }
+  clipCenterCircle(ctx);
 
   return canvas;
 };

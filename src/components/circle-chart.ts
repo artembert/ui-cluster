@@ -4,10 +4,10 @@ import { drawPieChart, PieChartItem } from "./pie-chart";
 
 const createMaker: () => HTMLElement = () => {
   const data: PieChartItem[] = [
-    { label: "Food", value: 1, color: "#39CCCC" },
-    { label: "Party", value: 1, color: "#3D9970" },
-    { label: "Rent", value: 1, color: "#001F3F" },
-    { label: "Chocolates", value: 1, color: "#85144B" },
+    { label: "Food", value: 1, color: "#003f5c" },
+    { label: "Party", value: 1, color: "#7a5195" },
+    { label: "Rent", value: 1, color: "#ef5675" },
+    { label: "Chocolates", value: 1, color: "#ffa600" },
   ];
 
   return drawPieChart(data);
