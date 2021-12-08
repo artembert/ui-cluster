@@ -23,5 +23,25 @@ map.on("load", function () {
     type: "circle",
     source: "hexapoint_3000",
     "source-layer": "public.hexapoint_3000",
+    paint: {
+      "circle-color": "hsla(215,28%,59%, 0.35)",
+      "circle-stroke-color": "#7992B4",
+      "circle-stroke-width": 0.5,
+      "circle-radius": [
+        "interpolate",
+        ["linear"],
+        ["get", "total"],
+        1,
+        2,
+        10,
+        3.5,
+        100,
+        5,
+        250,
+        6.5,
+        1033,
+        8,
+      ],
+    },
   });
 });
