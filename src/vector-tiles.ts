@@ -1,6 +1,10 @@
 import "./style.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
+import "./libs/mapbox-gl-framerate.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import FrameRateControl from "./libs/mapbox-gl-framerate";
 
 const map = new maplibregl.Map({
   container: "map",
@@ -10,6 +14,8 @@ const map = new maplibregl.Map({
   style:
     "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
 });
+const fps = new FrameRateControl();
+map.addControl(fps);
 
 map.on("load", function () {
   map.addSource("hexapoint_3000", {
