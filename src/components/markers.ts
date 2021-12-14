@@ -33,10 +33,11 @@ const setCount: (count: number, counter: HTMLElement | null) => void = (
 
 export const updateMarkers: (
   map: maplibregl.Map,
-  counterElement: HTMLElement | null
-) => void = (map, counterElement) => {
+  counterElement: HTMLElement | null,
+  sourceLayersNames: string[]
+) => void = (map, counterElement, sourceLayersNames) => {
   const clusterFeatures = map.queryRenderedFeatures(undefined, {
-    layers: ["public.hexapoint_3000"],
+    layers: sourceLayersNames,
   }) as any as ClusterFeature[];
   console.log(clusterFeatures);
 
