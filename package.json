@@ -40,6 +40,7 @@
     "vite": "2.6.13"
   },
   "dependencies": {
-    "@primer/css": "^19.0.0"
+    "@primer/css": "^19.0.0",
+    "rxjs": "^7.4.0"
   }
 }

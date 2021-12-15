@@ -7,6 +7,7 @@ import "./libs/mapbox-gl-framerate.js";
 import FrameRateControl from "./libs/mapbox-gl-framerate";
 import { updateMarkers } from "./components/markers";
 import { clusterStyleConfig } from "./configs/cluster-style.config";
+import { debounceTime, fromEvent } from "rxjs";
 
 type SourceParams = [string, number, number];
 
@@ -40,9 +41,11 @@ map.on("load", function () {
   map.on("data", function (e) {
     if (e.sourceId?.includes("hexapoint_") || !e.isSourceLoaded) return;
 
-    map.on("moveend", () =>
-      updateMarkers(map, counterElement, clustersLayersNames)
-    );
+    fromEvent(map, "moveend")
+      .pipe(debounceTime(300))
+      .subscribe(() => {
+        updateMarkers(map, counterElement, clustersLayersNames);
+      });
     updateMarkers(map, counterElement, clustersLayersNames);
   });
 });
