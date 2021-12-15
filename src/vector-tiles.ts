@@ -16,9 +16,9 @@ const counterElement: HTMLElement | null = document.getElementById("counter");
 const zoomLevelElement: HTMLElement | null = document.getElementById("zoom");
 const map = new maplibregl.Map({
   container: "map",
-  zoom: 9,
+  zoom: 8.9,
   minZoom: 1,
-  center: [33.32, 60.44],
+  center: [30.32, 59.94],
   style:
     "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
 });
