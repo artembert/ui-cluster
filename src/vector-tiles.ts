@@ -8,10 +8,12 @@ import FrameRateControl from "./libs/mapbox-gl-framerate";
 import { updateMarkers } from "./components/markers";
 import { clusterStyleConfig } from "./configs/cluster-style.config";
 import { debounceTime, fromEvent, merge } from "rxjs";
+import { setZoomIndicator } from "./components/zoom-indicator";
 
 type SourceParams = [string, number, number];
 
 const counterElement: HTMLElement | null = document.getElementById("counter");
+const zoomLevelElement: HTMLElement | null = document.getElementById("zoom");
 const map = new maplibregl.Map({
   container: "map",
   zoom: 9,
@@ -48,6 +50,11 @@ map.on("load", function () {
   });
   addSources(map, sources);
   addLayers(map, sources);
+
+  setZoomIndicator(zoomLevelElement, map.getZoom());
+  fromEvent(map, "zoomend").subscribe(() =>
+    setZoomIndicator(zoomLevelElement, map.getZoom())
+  );
 });
 
 const addSources: (map: maplibregl.Map, sources: SourceParams[]) => void = (

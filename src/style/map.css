@@ -44,10 +44,12 @@ html {
 
 .header__counter {
   margin-left: auto;
+  align-self: center;
 }
 
 .counter {
   font-family: monospace;
+  display: grid;
 }
 
 .h1 {

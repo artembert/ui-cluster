@@ -1,6 +1,7 @@
 import maplibregl, { Marker } from "maplibre-gl";
 import { drawPieChart, PieChartItem } from "./pie-chart";
 import { Point } from "geojson";
+import { setClustersCounter } from "./clusters-counter";
 
 interface ClusterFeature {
   geometry: Point;
@@ -18,17 +19,6 @@ const createMakerElement: () => HTMLElement = () => {
   ];
 
   return drawPieChart(data);
-};
-
-const setCount: (count: number, counter: HTMLElement | null) => void = (
-  count,
-  counter
-) => {
-  if (!counter) {
-    return;
-  }
-  const res = count.toString(10).padStart(3);
-  counter.innerText = "Total:" + res;
 };
 
 export const updateMarkers: (
@@ -72,5 +62,5 @@ export const updateMarkers: (
     existingMarkers[String(properties.id)] = marker;
   });
 
-  setCount(Object.keys(existingMarkers).length, counterElement);
+  setClustersCounter(Object.keys(existingMarkers).length, counterElement);
 };
