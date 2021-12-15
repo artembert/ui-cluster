@@ -7,7 +7,7 @@ import "./libs/mapbox-gl-framerate.js";
 import FrameRateControl from "./libs/mapbox-gl-framerate";
 import { updateMarkers } from "./components/markers";
 import { clusterStyleConfig } from "./configs/cluster-style.config";
-import { debounceTime, fromEvent } from "rxjs";
+import { debounceTime, fromEvent, merge } from "rxjs";
 
 type SourceParams = [string, number, number];
 
@@ -35,30 +35,28 @@ const clustersLayersNames: string[] = sources.map(([name]) => "public." + name);
 map.addControl(fps);
 
 map.on("load", function () {
-  addSources(map, sources);
-  addLayers(map, sources);
-
-  map.on("data", function (e) {
-    if (e.sourceId?.includes("hexapoint_") || !e.isSourceLoaded) return;
-
-    fromEvent(map, "moveend")
-      .pipe(debounceTime(300))
+  map.on("sourcedata", function (e) {
+    if (!e.sourceId?.includes("hexapoint_") || !e.isSourceLoaded) {
+      return;
+    }
+    merge(fromEvent(map, "moveend"), fromEvent(map, "movestart"))
+      .pipe(debounceTime(200))
       .subscribe(() => {
         updateMarkers(map, counterElement, clustersLayersNames);
       });
     updateMarkers(map, counterElement, clustersLayersNames);
   });
+  addSources(map, sources);
+  addLayers(map, sources);
 });
 
 const addSources: (map: maplibregl.Map, sources: SourceParams[]) => void = (
   map,
   sources
 ) => {
-  sources.forEach(([name, minzoom, maxzoom]) => {
+  sources.forEach(([name]) => {
     map.addSource(name, {
       type: "vector",
-      maxzoom,
-      minzoom,
       tiles: [
         `https://139.geosemantica.ru/martin/public.${name}/{z}/{x}/{y}.pbf`,
       ],

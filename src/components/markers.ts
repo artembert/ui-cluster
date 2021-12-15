@@ -39,9 +39,8 @@ export const updateMarkers: (
   const clusterFeatures = map.queryRenderedFeatures(undefined, {
     layers: sourceLayersNames,
   }) as any as ClusterFeature[];
-  console.log(clusterFeatures);
+  console.log("update markers", clusterFeatures);
 
-  console.log("existingMarkers", Object.keys(existingMarkers).length);
   Object.keys(existingMarkers)
     .filter(
       (existingId) =>
@@ -50,7 +49,6 @@ export const updateMarkers: (
           .includes(existingId)
     )
     .forEach((item) => {
-      console.log("remove");
       existingMarkers[item].remove();
       delete existingMarkers[item];
     });
@@ -63,7 +61,6 @@ export const updateMarkers: (
       throw Error("id is not provided");
     }
     if (existingMarkers[String(properties.id)] !== undefined) {
-      console.log("marker exists");
       return;
     }
     const marker = new maplibregl.Marker({
@@ -74,11 +71,6 @@ export const updateMarkers: (
       .addTo(map);
     existingMarkers[String(properties.id)] = marker;
   });
-  console.log("total", Object.keys(existingMarkers).length);
-  console.log(
-    "real",
-    document.querySelectorAll(".maplibregl-marker.mapboxgl-marker").length
-  );
 
   setCount(Object.keys(existingMarkers).length, counterElement);
 };
