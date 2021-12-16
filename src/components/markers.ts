@@ -1,12 +1,7 @@
 import maplibregl, { Marker } from "maplibre-gl";
 import { drawPieChart, PieChartItem } from "./pie-chart";
-import { Point } from "geojson";
+import { ClusterFeature } from "../models/cluster-feature.model";
 import { setClustersCounter } from "./clusters-counter";
-
-interface ClusterFeature {
-  geometry: Point;
-  properties: { id: number };
-}
 
 const existingMarkers: Record<string, Marker> = {};
 
@@ -24,26 +19,21 @@ const createMakerElement: () => HTMLElement = () => {
 export const updateMarkers: (
   map: maplibregl.Map,
   counterElement: HTMLElement | null,
-  sourceLayersNames: string[]
-) => void = (map, counterElement, sourceLayersNames) => {
-  const clusterFeatures = map.queryRenderedFeatures(undefined, {
-    layers: sourceLayersNames,
-  }) as any as ClusterFeature[];
-  console.log("update markers", clusterFeatures);
+  features: ClusterFeature[]
+) => void = (map, counterElement, features) => {
+  console.log("update markers", features);
 
   Object.keys(existingMarkers)
     .filter(
       (existingId) =>
-        !clusterFeatures
-          .map((item) => String(item.properties.id))
-          .includes(existingId)
+        !features.map((item) => String(item.properties.id)).includes(existingId)
     )
     .forEach((item) => {
       existingMarkers[item].remove();
       delete existingMarkers[item];
     });
 
-  clusterFeatures.forEach(({ geometry, properties }) => {
+  features.forEach(({ geometry, properties }) => {
     if (geometry.type !== "Point") {
       return;
     }

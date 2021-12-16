@@ -9,11 +9,14 @@ import { updateMarkers } from "./components/markers";
 import { clusterStyleConfig } from "./configs/cluster-style.config";
 import { debounceTime, fromEvent, merge } from "rxjs";
 import { setZoomIndicator } from "./components/zoom-indicator";
+import { setLayerIndicator } from "./components/layer-indicator";
+import { ClusterFeature } from "./models/cluster-feature.model";
 
 type SourceParams = [string, number, number];
 
 const counterElement: HTMLElement | null = document.getElementById("counter");
 const zoomLevelElement: HTMLElement | null = document.getElementById("zoom");
+const layerElement: HTMLElement | null = document.getElementById("layer");
 const map = new maplibregl.Map({
   container: "map",
   zoom: 8.9,
@@ -44,15 +47,22 @@ map.on("load", function () {
     merge(fromEvent(map, "moveend"), fromEvent(map, "movestart"))
       .pipe(debounceTime(200))
       .subscribe(() => {
-        updateMarkers(map, counterElement, clustersLayersNames);
+        const visibleFeatures = map.queryRenderedFeatures(undefined, {
+          layers: clustersLayersNames,
+        }) as any as ClusterFeature[];
+        updateMarkers(map, counterElement, visibleFeatures);
+        setLayerIndicator(layerElement, visibleFeatures[0].source);
       });
-    updateMarkers(map, counterElement, clustersLayersNames);
+    const visibleFeatures = map.queryRenderedFeatures(undefined, {
+      layers: clustersLayersNames,
+    }) as any as ClusterFeature[];
+    updateMarkers(map, counterElement, visibleFeatures);
   });
   addSources(map, sources);
   addLayers(map, sources);
 
   setZoomIndicator(zoomLevelElement, map.getZoom());
-  fromEvent(map, "zoomend").subscribe(() =>
+  merge(fromEvent(map, "zoomstart"), fromEvent(map, "zoomend")).subscribe(() =>
     setZoomIndicator(zoomLevelElement, map.getZoom())
   );
 });
