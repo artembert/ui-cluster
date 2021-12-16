@@ -4,6 +4,11 @@ export interface PieChartItem {
   color: string;
 }
 
+const pieChartSizes = {
+  diameter: 20,
+  borderWidth: 4,
+};
+
 const degreeToRadians: (angle: number) => number = (angle) => {
   return (angle * Math.PI) / 180;
 };
@@ -51,7 +56,7 @@ const calculateEnd: (
 const clipCenterCircle: (
   ctx: CanvasRenderingContext2D,
   borderWidth?: number
-) => void = (ctx, borderWidth = 5) => {
+) => void = (ctx, borderWidth = pieChartSizes.borderWidth) => {
   const [x, y] = [ctx.canvas.width / 2, ctx.canvas.height / 2];
 
   if (borderWidth > ctx.canvas.width / 2) {
@@ -78,7 +83,7 @@ const clipCenterCircle: (
 export const drawPieChart: (
   data: PieChartItem[],
   size?: number
-) => HTMLCanvasElement = (data, size = 20) => {
+) => HTMLCanvasElement = (data, size = pieChartSizes.diameter) => {
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
