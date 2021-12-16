@@ -26,14 +26,15 @@ const map = new maplibregl.Map({
     "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
 });
 const fps = new FrameRateControl();
+const zoomLevelSteps = [0, 2.3, 3.6, 4.8, 6.3, 8.7, 10.8, 11.8];
 const sources: SourceParams[] = [
-  ["hexapoint_800", 9.2, 11.8],
-  ["hexapoint_3000", 7.7, 9.2],
-  ["hexapoint_10000", 6.3, 7.7],
-  ["hexapoint_25000", 4.8, 6.3],
-  ["hexapoint_50000", 3.6, 4.8],
-  ["hexapoint_100000", 2.3, 3.6],
-  ["hexapoint_250000", 0, 2.3],
+  ["hexapoint_800", zoomLevelSteps[6], zoomLevelSteps[7]],
+  ["hexapoint_3000", zoomLevelSteps[5], zoomLevelSteps[6]],
+  ["hexapoint_10000", zoomLevelSteps[4], zoomLevelSteps[5]],
+  ["hexapoint_25000", zoomLevelSteps[3], zoomLevelSteps[4]],
+  ["hexapoint_50000", zoomLevelSteps[2], zoomLevelSteps[3]],
+  ["hexapoint_100000", zoomLevelSteps[1], zoomLevelSteps[2]],
+  ["hexapoint_250000", zoomLevelSteps[0], zoomLevelSteps[1]],
 ];
 const clustersLayersNames: string[] = sources.map(([name]) => "public." + name);
 
